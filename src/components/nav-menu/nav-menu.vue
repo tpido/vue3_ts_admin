@@ -6,45 +6,62 @@
     </div>
 
     <el-menu
-      active-text-color="#ffd04b"
       background-color="#001529"
-      default-active="2"
       text-color="white"
+      active-text-color="#ffd04b"
+      unique-opened
+      :collapse="isCollapse"
     >
-      <el-sub-menu index="1">
-        <template #title>
-          <el-icon><location /></el-icon>
-          <span>Navigator One</span>
+      <i class="el-icon-monitor"></i>
+      <template v-for="item in userMenu" :key="item.id">
+        <template v-if="item.type === 1">
+          <el-sub-menu :index="item.id + ''">
+            <template #title>
+              <el-icon v-if="item.id === 38">
+                <Monitor></Monitor>
+              </el-icon>
+              <el-icon v-if="item.id === 1">
+                <Setting></Setting>
+              </el-icon>
+              <el-icon v-if="item.id === 9">
+                <Goods></Goods>
+              </el-icon>
+              <el-icon v-if="item.id === 41">
+                <ChatLineRound></ChatLineRound>
+              </el-icon>
+              <span>{{ item.name }}</span>
+            </template>
+            <template v-for="childItem in item.children" :key="childItem.id">
+              <el-menu-item :index="childItem.id + ''">
+                {{ childItem.name }}
+              </el-menu-item>
+            </template>
+          </el-sub-menu>
         </template>
-        <el-menu-item-group title="Group One">
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group Two">
-          <el-menu-item index="1-3">item three</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="1-4">
-          <template #title>item four</template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <span>Navigator Two</span>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <el-icon><document /></el-icon>
-        <span>Navigator Three</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <span>Navigator Four</span>
-      </el-menu-item>
+        <template v-if="item.type === 0">
+          <el-sub-menu>
+            <template #title>
+              <span>{{ item.name }}</span>
+            </template>
+          </el-sub-menu>
+        </template>
+      </template>
     </el-menu>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Monitor, Setting, Goods, ChatLineRound } from '@element-plus/icons';
+import { computed } from '@vue/reactivity';
+import { useStore } from 'vuex';
+import { defineProps } from 'vue';
+const store = useStore();
+const userMenu = computed(() => store.state.loginModule.userMenu);
+
+const props = defineProps<{
+  isCollapse: boolean;
+}>();
+</script>
 
 <style lang="less" scoped>
 #nav-menu {
@@ -60,10 +77,11 @@
 
     img {
       height: 100%;
-      margin-right: 10px;
+      margin-right: 21px;
     }
 
     span {
+      white-space: nowrap;
       font-weight: 700;
       color: white;
     }

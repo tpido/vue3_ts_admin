@@ -1,11 +1,11 @@
 <template>
   <div id="main">
     <el-container class="main-content">
-      <el-aside width="200px">
-        <nav-menu></nav-menu>
+      <el-aside :width="isCollapse ? '60px' : '210px'">
+        <nav-menu :isCollapse="isCollapse"></nav-menu>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header><NavFold @fold-action="collapseHandle" /> </el-header>
         <el-main>Main</el-main>
       </el-container>
     </el-container>
@@ -13,7 +13,15 @@
 </template>
 
 <script setup lang="ts">
+import NavFold from '@/components/nav-fold/nav-fold.vue';
 import NavMenu from '@/components/nav-menu/nav-menu.vue';
+import { ref } from 'vue';
+
+const isCollapse = ref(false);
+
+const collapseHandle = () => {
+  isCollapse.value = !isCollapse.value;
+};
 </script>
 
 <style lang="less" scoped>
@@ -38,5 +46,6 @@ import NavMenu from '@/components/nav-menu/nav-menu.vue';
 
 .el-aside {
   background-color: #001529;
+  transition: width 300ms ease;
 }
 </style>

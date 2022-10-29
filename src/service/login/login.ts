@@ -17,7 +17,7 @@ export function GetUserInfoById(id: number) {
 
 export function GetUserMenuById(id: number) {
   return MyRequest.get({
-    url: `/menu/${id}`,
+    url: `/role/${id}/menu`,
     showLoading: false
   });
 }
